@@ -1,19 +1,32 @@
 import { useState } from "react";
 import logo from "../assets/gbrsa-logo.png";
 
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0DYAFtQwN_LcWydmaOF40IdjLFznmqQPA2frVT6_HEin-3NJBenWFtagEfAh0v45uPQ/exec";
+
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (loading) return;
+    setLoading(true);
     try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbw0DYAFtQwN_LcWydmaOF40IdjLFznmqQPA2frVT6_HEin-3NJBenWFtagEfAh0v45uPQ/exec", {
+      // IMPORTANT: Use URLSearchParams and do NOT set custom headers.
+      // This avoids a CORS preflight, which Apps Script cannot answer.
+      const body = new URLSearchParams({ username, password });
+      const res = await fetch(APPS_SCRIPT_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Invalid response from server");
+      }
       if (data.success && data.folderLink) {
         window.location.href = data.folderLink;
       } else {
@@ -21,6 +34,8 @@ export default function Login() {
       }
     } catch (err) {
       alert("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,9 +64,10 @@ export default function Login() {
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>
