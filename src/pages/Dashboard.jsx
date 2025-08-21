@@ -1,21 +1,17 @@
 import React from "react";
+import Footer from "../components/Footer";
 
-function Dashboard({ user, setUser }) {
+export default function Dashboard() {
   return (
-    <div>
-      <h2>Welcome, {user.id}</h2>
-      {user.link ? (
-        <p>
-          <a href={user.link} target="_blank" rel="noopener noreferrer">
-            📂 Open Your Attendance & Receipt File
-          </a>
-        </p>
-      ) : (
-        <p>No file found for this account.</p>
-      )}
-      <button onClick={() => setUser(null)}>Logout</button>
+    <div className="dashboard-container">
+      <header className="dashboard-header">
+        <img src="/icons/icon-192.png" alt="GBRSA Logo" className="dashboard-logo" />
+        <h1>GBRSA Attendance Dashboard</h1>
+      </header>
+
+      {/* Dashboard content goes here */}
+
+      <Footer />
     </div>
   );
 }
-
-export default Dashboard;
