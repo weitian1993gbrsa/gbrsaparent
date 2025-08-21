@@ -18,3 +18,13 @@ button {
   margin-top: 1rem;
   cursor: pointer;
 }
+
+/* Footer Styling */
+.app-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 1rem;
+  color: #666;
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+}
