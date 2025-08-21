@@ -13,20 +13,13 @@ export default function Login() {
     if (loading) return;
     setLoading(true);
     try {
-      // IMPORTANT: Use URLSearchParams and do NOT set custom headers.
-      // This avoids a CORS preflight, which Apps Script cannot answer.
-      const body = new URLSearchParams({ username, password });
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        body
-      });
+      const url = new URL(APPS_SCRIPT_URL);
+      url.searchParams.set("username", username);
+      url.searchParams.set("password", password);
+      const res = await fetch(url.toString(), { method: "GET" });
       const text = await res.text();
       let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error("Invalid response from server");
-      }
+      try { data = JSON.parse(text); } catch { throw new Error("Invalid response from server"); }
       if (data.success && data.folderLink) {
         window.location.href = data.folderLink;
       } else {
