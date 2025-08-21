@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Footer from "./components/Footer";
 import { useNavigate } from "react-router-dom";
+import Footer from "./components/Footer";
 
 export default function Login() {
   const [parentId, setParentId] = useState("");
@@ -15,19 +15,23 @@ export default function Login() {
     setError("");
 
     try {
-      // Example fetch from Google Sheets API
       const res = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${import.meta.env.VITE_PARENT_SHEET_ID}/values/ParentAccess!A:C?key=${import.meta.env.VITE_SHEETS_API_KEY}`
+        "https://script.google.com/macros/s/AKfycbw0DYAFtQwN_LcWydmaOF40IdjLFznmqQPA2frVT6_HEin-3NJBenWFtagEfAh0v45uPQ/exec",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ parentId, password }),
+        }
       );
+
       const data = await res.json();
-      const rows = data.values || [];
 
-      // Find matching parent row [ParentID, Password, FolderLink]
-      const match = rows.find((row) => row[0] === parentId && row[1] === password);
-
-      if (match) {
-        const folderLink = match[2];
-        const parentData = { parentId, folderLink, loginTime: Date.now() };
+      if (data.success) {
+        const parentData = {
+          parentId,
+          folderLink: data.folderLink,
+          loginTime: Date.now(),
+        };
         localStorage.setItem("parentData", JSON.stringify(parentData));
         navigate("/dashboard");
       } else {
@@ -41,37 +45,36 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container">
-      <header className="login-header">
-        <img src="/icons/icon-192.png" alt="GBRSA Logo" className="login-logo" />
-        <h1>Attendance & Receipt Portal</h1>
-        <p>Login to see your child’s attendance & receipt file.</p>
-      </header>
-
-      {loading ? (
-        <div className="loading-screen">
-          <div className="spinner"></div>
-          <p>Verifying your credentials…</p>
-        </div>
-      ) : (
-        <form className="login-form" onSubmit={handleLogin}>
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
+      <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Attendance & Receipt Portal</h2>
+        <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="text"
             placeholder="Enter ID"
             value={parentId}
             onChange={(e) => setParentId(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md"
+            required
           />
           <input
             type="password"
             placeholder="Enter Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md"
+            required
           />
-          <button type="submit">Login</button>
-          {error && <p className="error">{error}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
-      )}
-
+      </div>
       <Footer />
     </div>
   );
