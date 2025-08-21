@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Footer from "./components/Footer";
 import { useNavigate } from "react-router-dom";
+import Footer from "./components/Footer";
 
 export default function Dashboard() {
-  const [parentData, setParentData] = useState(null);
   const navigate = useNavigate();
+  const [parentData, setParentData] = useState(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("parentData");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Check for auto-logout after 5 minutes
-      if (Date.now() - parsed.loginTime > 5 * 60 * 1000) {
-        localStorage.clear();
+    const stored = localStorage.getItem("parentData");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      const now = Date.now();
+      // Auto-logout after 5 minutes
+      if (now - parsed.loginTime > 5 * 60 * 1000) {
+        localStorage.removeItem("parentData");
         navigate("/login");
       } else {
         setParentData(parsed);
@@ -22,24 +23,29 @@ export default function Dashboard() {
     }
   }, [navigate]);
 
-  if (!parentData) return null;
+  if (!parentData) {
+    return null; // or loading spinner
+  }
 
   return (
-    <div className="dashboard-container">
-      <header className="dashboard-header">
-        <img src="/icons/icon-192.png" alt="GBRSA Logo" className="dashboard-logo" />
-        <h1>Welcome, Parent {parentData.parentId}</h1>
-      </header>
-
-      <div className="card">
-        <h2>Your Attendance & Receipt Folder</h2>
-        <iframe
-          src={parentData.folderLink}
-          className="drive-frame"
-          title="Parent Folder"
-        ></iframe>
-      </div>
-
+    <div className="flex flex-col min-h-screen justify-between bg-gray-50">
+      <main className="flex flex-1 items-center justify-center p-4">
+        <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-2xl">
+          <h2 className="text-xl font-bold text-center mb-4 text-blue-700">
+            Welcome, {parentData.parentId}
+          </h2>
+          <p className="text-center mb-4">Your attendance & receipts folder:</p>
+          <div className="flex justify-center">
+            <iframe
+              src={parentData.folderLink}
+              width="100%"
+              height="400"
+              style={{ border: "none" }}
+              title="Google Drive Folder"
+            ></iframe>
+          </div>
+        </div>
+      </main>
       <Footer />
     </div>
   );
