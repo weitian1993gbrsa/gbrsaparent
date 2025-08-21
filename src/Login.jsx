@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from "../public/icons/icon-192.png";
 
 // Google Apps Script URL
 const API_URL = "https://script.google.com/macros/s/AKfycbw0DYAFtQwN_LcWydmaOF40IdjLFznmqQPA2frVT6_HEin-3NJBenWFtagEfAh0v45uPQ/exec";
@@ -29,7 +30,8 @@ function Login({ onLogin }) {
 
   return (
     <div>
-      <p>Login to see your child’s attendance & receipt file.</p>
+      <img src={logo} alt="GBRSA Logo" className="logo" />
+      <p>Please login to see your child’s attendance & receipt file.</p>
       <input
         type="text"
         placeholder="Enter ID"
