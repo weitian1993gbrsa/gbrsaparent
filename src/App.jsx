@@ -1,20 +1,16 @@
-import React, { useState } from "react";
-import Dashboard from "./Dashboard";
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
+import Dashboard from "./Dashboard";
 
-function App() {
-  const [user, setUser] = useState(null);
-
+export default function App() {
   return (
-    <div className="app">
-      <h1>Attendance & Receipt Portal</h1>
-      {user ? (
-        <Dashboard user={user} setUser={setUser} />
-      ) : (
-        <Login onLogin={(u) => setUser(u)} />
-      )}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
