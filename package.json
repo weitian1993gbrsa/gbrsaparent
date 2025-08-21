@@ -1,19 +1,15 @@
 {
-  "name": "attendance-app-sheets-pwa-gbrsa",
+  "name": "gbrsa-parent-portal-v1",
   "version": "1.0.0",
-  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "serve": "vite preview"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.0.0",
-    "vite": "^5.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "tailwindcss": "^3.0.0"
   }
 }
