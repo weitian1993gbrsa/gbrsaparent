@@ -1,12 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login.jsx";
+import React, { useState } from "react";
+import Dashboard from "./Dashboard";
+import Login from "./Login";
 
-export default function App() {
+function App() {
+  const [user, setUser] = useState(null);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-      </Routes>
-    </Router>
+    <div className="app">
+      <h1>Attendance & Receipt Portal</h1>
+      {user ? (
+        <Dashboard user={user} setUser={setUser} />
+      ) : (
+        <Login onLogin={(u) => setUser(u)} />
+      )}
+    </div>
   );
 }
+
+export default App;
