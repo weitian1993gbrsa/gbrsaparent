@@ -7,16 +7,20 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch("https://script.google.com/macros/s/AKfycbw0DYAFtQwN_LcWydmaOF40IdjLFznmqQPA2frVT6_HEin-3NJBenWFtagEfAh0v45uPQ/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await res.json();
-    if (data.success && data.folderLink) {
-      window.location.href = data.folderLink; // Redirect to Drive folder
-    } else {
-      alert("Invalid credentials!");
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbw0DYAFtQwN_LcWydmaOF40IdjLFznmqQPA2frVT6_HEin-3NJBenWFtagEfAh0v45uPQ/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (data.success && data.folderLink) {
+        window.location.href = data.folderLink;
+      } else {
+        alert("Invalid credentials!");
+      }
+    } catch (err) {
+      alert("Network error. Please try again.");
     }
   };
 
