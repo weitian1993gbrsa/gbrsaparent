@@ -1,6 +1,8 @@
-# Attendance & Receipt Portal
+# Attendance & Receipt Portal (PWA with GBRSA Icon)
 
-This project is a React web app deployed on Netlify that uses **Google Sheets** + **Apps Script** as a simple database for login credentials and links.
+React + Vite app that uses **Google Sheets** + **Apps Script** for login, deployed on **Netlify**, and installable as a **Progressive Web App (PWA)**.
+
+Includes **GBRSA branding icons** for mobile install.
 
 ## 🚀 Setup
 
@@ -19,7 +21,6 @@ This project is a React web app deployed on Netlify that uses **Google Sheets** 
    - Build command: `npm run build`
    - Publish directory: `dist`
 
-## 🔑 Google Sheets API
-- Store `ID | Password | DriveLink` in your Google Sheet.
-- Publish via Apps Script and replace the `API_URL` in `src/Login.jsx`.
+4. App is PWA-enabled:
+   - Users can install it on their phone (Add to Home Screen).
 
