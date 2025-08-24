@@ -1,0 +1,21 @@
+// Paste this into Google Sheets: Extensions -> Apps Script
+// Deploy as Web App: Execute as Me, Who has access: Anyone
+
+function doGet(e) {
+  var username = (e.parameter.username || "").trim();
+  var password = (e.parameter.password || "").trim();
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Credentials");
+  var values = sheet.getDataRange().getValues();
+
+  for (var i = 1; i < values.length; i++) {
+    if (values[i][1] == username && values[i][2] == password) {
+      return ContentService.createTextOutput(JSON.stringify({
+        success: true,
+        folderLink: "https://drive.google.com/drive/folders/YOUR_FOLDER_ID" // <-- replace
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+  return ContentService.createTextOutput(JSON.stringify({ success: false }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
