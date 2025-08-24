@@ -1,21 +1,56 @@
-// Paste this into Google Sheets: Extensions -> Apps Script
-// Deploy as Web App: Execute as Me, Who has access: Anyone
+// Google Apps Script for GBRSA Parent Portal
+// Paste into: Extensions -> Apps Script, then Deploy as Web app (Execute as Me, Anyone)
 
-function doGet(e) {
-  var username = (e.parameter.username || "").trim();
-  var password = (e.parameter.password || "").trim();
+const SHEET_ID = "1CmGtsgx6Mle85TyQVAKwW05RkWk9jERSU4JVZIRAHg8"; // user's sheet ID
+const CREDENTIALS_SHEET_NAME = "Credentials"; // tab name in the spreadsheet
+const USERNAME_HEADER = "Username";           // header text in row 1
+const PASSWORD_HEADER = "Password";           // header text in row 1
+const FOLDER_LINK = "https://drive.google.com/drive/folders/YOUR_FOLDER_ID"; // TODO replace
 
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Credentials");
-  var values = sheet.getDataRange().getValues();
+function doGet(e)  { return handle_(e); }
+function doPost(e) { return handle_(e); }
 
-  for (var i = 1; i < values.length; i++) {
-    if (values[i][1] == username && values[i][2] == password) {
-      return ContentService.createTextOutput(JSON.stringify({
-        success: true,
-        folderLink: "https://drive.google.com/drive/folders/YOUR_FOLDER_ID" // <-- replace
-      })).setMimeType(ContentService.MimeType.JSON);
+function handle_(e) {
+  try {
+    const p = parseParams_(e);
+    const username = (p.username || "").toString().trim();
+    const password = (p.password || "").toString().trim();
+    if (!username || !password) return json_({ success: false, reason: "missing-params" });
+
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const sh = ss.getSheetByName(CREDENTIALS_SHEET_NAME);
+    if (!sh) return json_({ success: false, reason: "no-credentials-sheet" });
+
+    const values = sh.getDataRange().getValues();
+    if (!values || values.length < 2) return json_({ success: false, reason: "no-rows" });
+
+    const headers = values[0].map(h => (h ?? "").toString().trim());
+    const uIdx = headers.indexOf(USERNAME_HEADER);
+    const pIdx = headers.indexOf(PASSWORD_HEADER);
+    if (uIdx === -1 || pIdx === -1) return json_({ success: false, reason: "headers-not-found", headers });
+
+    const uLookup = username.toLowerCase();
+    for (let i = 1; i < values.length; i++) {
+      const row = values[i];
+      const uVal = ((row[uIdx] ?? "") + "").trim().toLowerCase();
+      const pVal = ((row[pIdx] ?? "") + "").trim();
+      if (uVal === uLookup && pVal === password) {
+        return json_({ success: true, folderLink: FOLDER_LINK });
+      }
     }
+    return json_({ success: false, reason: "no-match" });
+  } catch (err) {
+    return json_({ success: false, reason: "exception", message: String(err) });
   }
-  return ContentService.createTextOutput(JSON.stringify({ success: false }))
-    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function parseParams_(e) {
+  if (!e) return {};
+  if (e.postData && e.postData.type && e.postData.type.indexOf("application/json") !== -1) {
+    try { return JSON.parse(e.postData.contents || "{}"); } catch (_) {}
+  }
+  return e.parameter || {};
+}
+function json_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
