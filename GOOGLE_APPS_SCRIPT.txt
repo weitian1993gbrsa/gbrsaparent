@@ -1,0 +1,67 @@
+// Google Apps Script for GBRSA Parent Portal
+// Sheet must have columns: Username | Password | FolderLink
+// Deploy as Web app: Execute as Me, Who has access: Anyone
+
+const SHEET_ID = "1CmGtsgx6Mle85TyQVAKwW05RkWk9jERSU4JVZIRAHg8"; // your sheet ID
+const CREDENTIALS_SHEET_NAME = "Credentials"; // sheet tab name
+const USERNAME_HEADER = "Username";
+const PASSWORD_HEADER = "Password";
+const FOLDER_HEADER   = "FolderLink";
+
+function doGet(e)  { return handle_(e); }
+function doPost(e) { return handle_(e); }
+
+function handle_(e) {
+  try {
+    const p = parseParams_(e);
+    const username = (p.username || "").toString().trim();
+    const password = (p.password || "").toString().trim();
+    if (!username || !password) return json_({ success:false, reason:"missing-params" });
+
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const sh = ss.getSheetByName(CREDENTIALS_SHEET_NAME);
+    if (!sh) return json_({ success:false, reason:"no-credentials-sheet" });
+
+    const values = sh.getDataRange().getValues();
+    if (!values || values.length < 2) return json_({ success:false, reason:"no-rows" });
+
+    const headers = values[0].map(h => (h ?? "").toString().trim());
+    const uIdx = headers.indexOf(USERNAME_HEADER);
+    const pIdx = headers.indexOf(PASSWORD_HEADER);
+    const fIdx = headers.indexOf(FOLDER_HEADER);
+    if (uIdx === -1 || pIdx === -1 || fIdx === -1) {
+      return json_({ success:false, reason:"headers-not-found", headers });
+    }
+
+    const uLookup = username.toLowerCase();
+
+    for (let i = 1; i < values.length; i++) {
+      const row = values[i];
+      const uVal = ((row[uIdx] ?? "") + "").trim().toLowerCase();
+      const pVal = ((row[pIdx] ?? "") + "").trim();
+      const fVal = ((row[fIdx] ?? "") + "").trim();
+
+      if (uVal === uLookup && pVal === password) {
+        return json_({ success:true, folderLink:fVal });
+      }
+    }
+    return json_({ success:false, reason:"no-match" });
+  } catch (err) {
+    return json_({ success:false, reason:"exception", message:String(err) });
+  }
+}
+
+function parseParams_(e) {
+  if (!e) return {};
+  if (e.postData && e.postData.type &&
+      e.postData.type.indexOf("application/json") !== -1) {
+    try { return JSON.parse(e.postData.contents || "{}"); } catch (_) {};
+  }
+  return e.parameter || {};
+}
+
+function json_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
