@@ -65,6 +65,15 @@
         document.getElementById("loginBtn").disabled = false;
       }
     });
+
+    // Reset loader if user comes back from external link
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("loginBtn").disabled = false;
+        document.getElementById("error").innerText = "";
+      }
+    });
   </script>
 </body>
 </html>
