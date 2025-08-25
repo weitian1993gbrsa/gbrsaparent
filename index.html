@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parent Portal</title>
+  <title>GBRSA Portal</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <div class="login-container">
@@ -25,7 +26,14 @@
   </div>
 
   <script>
-    // Replace this with your actual Google Apps Script Web App URL
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log("Service Worker registered:", reg))
+        .catch(err => console.log("Service Worker registration failed:", err));
+    }
+
+    // Google Apps Script Web App URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbw0DYAFtQwN_LcWydmaOF40IdjLFznmqQPA2frVT6_HEin-3NJBenWFtagEfAh0v45uPQ/exec";
 
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
