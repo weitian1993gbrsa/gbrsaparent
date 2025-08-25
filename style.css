@@ -9,29 +9,28 @@ body {
 }
 .login-card {
   background: white;
-  padding: 30px 25px;
-  border-radius: 15px;
-  box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+  padding: 40px 30px; /* more padding */
+  border-radius: 18px;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.12);
   width: 90%;
-  max-width: 360px;
+  max-width: 380px;
   text-align: center;
 }
 .logo {
-  width: 120px;
-  margin-bottom: 15px;
+  width: 130px;
+  margin-bottom: 20px; /* more spacing */
 }
 h2 {
-  margin: 10px 0 20px;
+  margin: 15px 0 25px; /* more spacing */
   color: #333;
 }
 input, button {
   width: 100%;
-  max-width: 100%;
   display: block;
-  margin: 10px auto;
-  padding: 14px;
-  border-radius: 25px;
-  font-size: 15px;
+  margin: 15px auto; /* more vertical spacing */
+  padding: 15px;
+  border-radius: 28px;
+  font-size: 16px;
   box-sizing: border-box;
 }
 input {
@@ -57,7 +56,7 @@ button:disabled {
   cursor: not-allowed;
 }
 p#error {
-  margin-top: 10px;
+  margin-top: 12px;
   color: red;
   font-size: 14px;
 }
@@ -80,10 +79,10 @@ p#error {
   border: 8px solid #f3f3f3;
   border-top: 8px solid #2196F3;
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 75px;
+  height: 75px;
   animation: spin 1s linear infinite;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 @keyframes spin {
   0% { transform: rotate(0deg); }
