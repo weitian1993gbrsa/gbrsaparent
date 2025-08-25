@@ -19,12 +19,6 @@
     <p id="error"></p>
   </div>
 
-  <div id="dashboard" class="hidden">
-    <h2>Welcome!</h2>
-    <p>Your Google Drive folder:</p>
-    <a id="folderLink" target="_blank">Open Folder</a>
-  </div>
-
   <script>
     // Register Service Worker
     if ('serviceWorker' in navigator) {
@@ -50,9 +44,7 @@
         let data = await res.json();
 
         if (data.success) {
-          document.querySelector(".login-container").classList.add("hidden");
-          document.getElementById("dashboard").classList.remove("hidden");
-          document.getElementById("folderLink").href = data.folderLink;
+          window.location.href = data.folderLink;  // direct redirect to folder
         } else {
           document.getElementById("error").innerText = "Invalid login!";
         }
