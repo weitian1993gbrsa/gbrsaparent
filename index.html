@@ -41,6 +41,7 @@
       document.getElementById("loading").classList.remove("hidden");
       document.getElementById("loginBtn").disabled = true;
 
+      // force lowercase before sending
       let userId = document.getElementById("userId").value.toLowerCase();
       let password = document.getElementById("password").value.toLowerCase();
 
