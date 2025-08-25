@@ -25,7 +25,6 @@
   </div>
 
   <script>
-    // Replace this with your actual Google Apps Script Web App URL
     const scriptURL = "YOUR_APPS_SCRIPT_URL";
 
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
@@ -33,23 +32,19 @@
       let userId = document.getElementById("userId").value;
       let password = document.getElementById("password").value;
 
-      try {
-        let res = await fetch(scriptURL, {
-          method: "POST",
-          body: JSON.stringify({ userId, password })
-        });
+      let res = await fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({ userId, password })
+      });
 
-        let data = await res.json();
+      let data = await res.json();
 
-        if (data.success) {
-          document.querySelector(".login-container").classList.add("hidden");
-          document.getElementById("dashboard").classList.remove("hidden");
-          document.getElementById("folderLink").href = data.folderLink;
-        } else {
-          document.getElementById("error").innerText = "Invalid login!";
-        }
-      } catch (err) {
-        document.getElementById("error").innerText = "Error connecting to server.";
+      if (data.success) {
+        document.querySelector(".login-container").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        document.getElementById("folderLink").href = data.folderLink;
+      } else {
+        document.getElementById("error").innerText = "Invalid login!";
       }
     });
   </script>
