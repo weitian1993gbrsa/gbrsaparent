@@ -19,6 +19,12 @@
     <p id="error"></p>
   </div>
 
+  <!-- Loading Screen -->
+  <div id="loading" class="hidden">
+    <div class="spinner"></div>
+    <p>Checking your account...</p>
+  </div>
+
   <script>
     // Register Service Worker
     if ('serviceWorker' in navigator) {
@@ -32,6 +38,8 @@
 
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+      document.getElementById("loading").classList.remove("hidden");
+
       let userId = document.getElementById("userId").value;
       let password = document.getElementById("password").value;
 
@@ -44,12 +52,14 @@
         let data = await res.json();
 
         if (data.success) {
-          window.location.href = data.folderLink;  // direct redirect to folder
+          window.location.href = data.folderLink;  // redirect directly
         } else {
           document.getElementById("error").innerText = "Invalid login!";
+          document.getElementById("loading").classList.add("hidden");
         }
       } catch (err) {
         document.getElementById("error").innerText = "Error connecting to server.";
+        document.getElementById("loading").classList.add("hidden");
       }
     });
   </script>
