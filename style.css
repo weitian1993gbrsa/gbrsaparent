@@ -34,15 +34,15 @@ button {
   cursor: pointer;
 }
 button:disabled {
-  background: #999;
+  background: #ccc;
   cursor: not-allowed;
 }
 button:hover:enabled {
   background: #0056b3;
 }
-/* Loading Overlay */
+/* Loading Page Overlay */
 #loading {
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -52,9 +52,12 @@ button:hover:enabled {
   background: rgba(255,255,255,0.95);
   z-index: 9999;
 }
+#loading.active {
+  display: flex;
+}
 .loader {
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #007bff;
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #007bff;
   border-radius: 50%;
   width: 60px;
   height: 60px;

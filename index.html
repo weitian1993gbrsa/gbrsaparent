@@ -8,7 +8,7 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <div class="login-container" id="loginBox">
+  <div class="login-container">
     <img src="logo.png" alt="Company Logo" class="logo">
     <h2>Parent Portal Login</h2>
     <form id="loginForm">
@@ -19,10 +19,10 @@
     <p id="error"></p>
   </div>
 
-  <!-- Loading Overlay -->
+  <!-- Loading Page (only after successful login) -->
   <div id="loading" class="hidden">
     <div class="loader"></div>
-    <p>Signing you in...</p>
+    <p>Redirecting to your folder...</p>
   </div>
 
   <script>
@@ -38,8 +38,6 @@
 
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      document.getElementById("loading").classList.remove("hidden");
-      document.getElementById("loginBox").classList.add("hidden");
       document.getElementById("loginBtn").disabled = true;
 
       let userId = document.getElementById("userId").value;
@@ -54,17 +52,16 @@
         let data = await res.json();
 
         if (data.success) {
-          window.location.href = data.folderLink;  // direct redirect to folder
+          document.getElementById("loading").classList.remove("hidden");
+          setTimeout(() => {
+            window.location.href = data.folderLink;  // redirect with loader visible
+          }, 800); // short delay for UX
         } else {
           document.getElementById("error").innerText = "Invalid login!";
-          document.getElementById("loading").classList.add("hidden");
-          document.getElementById("loginBox").classList.remove("hidden");
           document.getElementById("loginBtn").disabled = false;
         }
       } catch (err) {
         document.getElementById("error").innerText = "Error connecting to server.";
-        document.getElementById("loading").classList.add("hidden");
-        document.getElementById("loginBox").classList.remove("hidden");
         document.getElementById("loginBtn").disabled = false;
       }
     });
