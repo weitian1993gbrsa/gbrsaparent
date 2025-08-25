@@ -32,6 +32,7 @@ input {
   border-radius: 25px;
   outline: none;
   font-size: 14px;
+  text-align: center; /* 👈 Center align text */
 }
 input:focus {
   border-color: #2196F3;
