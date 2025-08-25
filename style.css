@@ -3,13 +3,14 @@ body {
   font-family: 'Arial', sans-serif;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: linear-gradient(to bottom, #e3f2fd, #ffffff);
 }
 .login-card {
   background: white;
-  padding: 40px 30px; /* more padding */
+  padding: 40px 30px;
   border-radius: 18px;
   box-shadow: 0px 6px 20px rgba(0,0,0,0.12);
   width: 90%;
@@ -18,16 +19,16 @@ body {
 }
 .logo {
   width: 130px;
-  margin-bottom: 20px; /* more spacing */
+  margin-bottom: 20px;
 }
 h2 {
-  margin: 15px 0 25px; /* more spacing */
+  margin: 15px 0 25px;
   color: #333;
 }
 input, button {
   width: 100%;
   display: block;
-  margin: 15px auto; /* more vertical spacing */
+  margin: 15px auto;
   padding: 15px;
   border-radius: 28px;
   font-size: 16px;
@@ -59,6 +60,12 @@ p#error {
   margin-top: 12px;
   color: red;
   font-size: 14px;
+}
+.footer {
+  margin-top: 25px;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
 }
 /* Loader Overlay */
 #loading {
