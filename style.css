@@ -7,6 +7,7 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+  overflow: hidden; /* prevent scrolling */
 }
 .login-card {
   background: white;
@@ -62,7 +63,7 @@ p#error {
   font-size: 14px;
 }
 .footer {
-  margin-top: 25px;
+  margin-top: 20px;
   font-size: 13px;
   color: #666;
   text-align: center;
