@@ -24,28 +24,27 @@ h2 {
   margin: 10px 0 20px;
   color: #333;
 }
-input {
+input, button {
   width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ddd;
+  max-width: 100%;
+  display: block;
+  margin: 10px auto;
+  padding: 14px;
   border-radius: 25px;
-  outline: none;
-  font-size: 14px;
-  text-align: center; /* 👈 Center align text */
+  font-size: 15px;
+  box-sizing: border-box;
+}
+input {
+  border: 1px solid #ddd;
+  text-align: center;
 }
 input:focus {
   border-color: #2196F3;
 }
 button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 12px;
   border: none;
-  border-radius: 25px;
   background: linear-gradient(to right, #2196F3, #1976D2);
   color: white;
-  font-size: 15px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
